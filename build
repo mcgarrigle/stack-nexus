@@ -1,0 +1,9 @@
+#!/bin/bash
+
+. cluster.env
+
+docker stack deploy -c nexus.stack.yml "${STACK}"
+sleep 60
+
+docker run -v nexus_data:/data "${NEXUS_IMAGE}" cat /data/admin.password
+echo

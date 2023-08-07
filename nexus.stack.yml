@@ -1,0 +1,29 @@
+version: '3.8'
+
+# docker run -d -p 8081:8081 --name nexus sonatype/nexus3
+# $ docker run -d -p 8081:8081 --name nexus -e INSTALL4J_ADD_VM_PARAMS="-Xms2703m -Xmx2703m -XX:MaxDirectMemorySize=2703m -Djava.util.prefs.userRoot=/some-other-dir" sonatype/nexus3
+
+services:
+
+  server:
+    image: "${NEXUS_IMAGE}"
+    environment:
+      INSTALL4J_ADD_VM_PARAMS: "-Xms2703m -Xmx2703m -XX:MaxDirectMemorySize=2703m"
+    volumes:
+      - 'data:/nexus-data'
+    networks:
+      - lan
+    ports:
+      - target: 8081
+        published: 8081
+    deploy:
+    deploy:
+      placement:
+        constraints:
+          - "node.labels.${STACK} == 1"
+
+volumes:
+  data:
+
+networks:
+  lan: {}
